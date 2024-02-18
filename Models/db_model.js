@@ -1,17 +1,16 @@
-const mySql=require("mysql");
-
-const user=mySql.createConnection({
-    host:process.env.HOST,
-    user:process.env.USER,
-    password:process.env.PASSWORD,
-    database:process.env.DATABASE
-})
-
-user.connect((err)=>{
-    if(err) console.log(err);
-    else{
-        console.log("Connected to Database");
+const mssql=require("mssql/msnodesqlv8");
+const config = {
+    user:"sa",
+    password:"Indrapandilawadi@1984",
+    database:"testdb",
+    server:"localhost",
+    driver:"msnodesqlv8",
+    options: {
+        trustedConnection: true
     }
-})
-
-module.exports=user;
+};
+mssql.connect(config, function (err) {
+    if (err) console.log(err);
+    console.log("Connected to Database");
+});
+// module.exports = mssql;
