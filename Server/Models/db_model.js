@@ -1,16 +1,20 @@
-const mssql=require("mssql/msnodesqlv8");
-const config = {
-    user:"sa",
-    password:"Indrapandilawadi@1984",
-    database:"testdb",
-    server:"localhost",
-    driver:"msnodesqlv8",
-    options: {
-        trustedConnection: true
-    }
+const { Client } = require('pg');
+
+// Database connection configuration
+const dbConfig = {
+    user: 'shivanshu',
+    password: 'admin',
+    host: 'localhost',
+    port: '5432',
+    database: 'postgres',
 };
-mssql.connect(config, function (err) {
-    if (err) console.log(err);
-    console.log("Connected to Database");
-});
-// module.exports = mssql;
+
+// Create a new PostgreSQL client
+const client = new Client(dbConfig);
+client.connect()
+    .then(() => {
+        console.log('Connected to PostgreSQL database');
+    })
+    .catch((err) => {
+        console.error('Error connecting to PostgreSQL database', err);
+    });
