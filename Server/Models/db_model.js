@@ -1,6 +1,6 @@
-const { Client } = require('pg');
+import pg from 'pg';
+const { Client } = pg;
 
-// Database connection configuration
 const dbConfig = {
     user: 'shivanshu',
     password: 'admin',
@@ -9,7 +9,6 @@ const dbConfig = {
     database: 'postgres',
 };
 
-// Create a new PostgreSQL client
 const client = new Client(dbConfig);
 
 const execute = async (query) => {
@@ -28,10 +27,15 @@ const execute = async (query) => {
 
 const text = `
     CREATE TABLE IF NOT EXISTS "users" (
-        user_id         SERIAL          PRIMARY KEY,
-        username        VARCHAR(50)     UNIQUE NOT NULL,
-        password_hash   VARCHAR(60)     NOT NULL, 
-        email           VARCHAR(100)    UNIQUE NOT NULL
+        user_id             SERIAL          PRIMARY KEY,
+        username            VARCHAR(50)     UNIQUE NOT NULL,
+        password_hash       VARCHAR(60)     NOT NULL, 
+        email               VARCHAR(100)    UNIQUE NOT NULL,
+        role                VARCHAR(100)    UNIQUE NOT NULL,
+        refresh_token       VARCHAR(100)    UNIQUE NOT NULL,
+        refresh_token_time  VARCHAR(100)    UNIQUE NOT NULL,
+        date_created        VARCHAR(100)    UNIQUE NOT NULL,
+        modifiy_date        VARCHAR(100)    UNIQUE NOT NULL
     );`;
 
 execute(text).then((result) => {

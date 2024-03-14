@@ -24,6 +24,13 @@ app.post('/api/login', (req, res) => {
 
     res.status(200).json({ message: 'Login successful' });
 })
+app.post('/api/signin', (req, res) => {
+    const { name, password } = req.body;
+    console.log('Name:', name);
+    console.log('Password:', password);
+
+    res.status(200).json({ message: 'User Created' });
+})
 
 io.on('connection', (socket) => {
     console.log('User Connected', socket.id);

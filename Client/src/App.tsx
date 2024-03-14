@@ -1,10 +1,10 @@
 import Layout from "./Layout";
-import HomePage from "@/components/HomePage";
+import LoginPage from "@/components/Login_Page/Login_Page";
 
 function App() {
   return (
     <Layout>
-      <HomePage />
+      <LoginPage />
     </Layout>
   );
 }
