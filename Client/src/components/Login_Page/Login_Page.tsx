@@ -20,7 +20,7 @@ export default function CardWithForm() {
     setEmail(e.target.value);
   };
 
-  const handleSubmitSignin = async (e: ChangeEvent<HTMLInputElement>) => { 
+  const handleSubmitSignin = async (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:5000/api/signin', {
@@ -38,7 +38,7 @@ export default function CardWithForm() {
       console.error('Error:', error);
     }
   }
-  const handleSubmitLogin = async (e: FormEvent<HTMLFormElement>) => { 
+  const handleSubmitLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await fetch('http://localhost:5000/api/login', {
@@ -49,8 +49,8 @@ export default function CardWithForm() {
         body: JSON.stringify({ name, password }),
       });
       const data = await response.json();
-      if (response.ok) console.log(data);
-      else console.error('Login failed:', data.error);
+      console.log('Response data:', data); // Log the response data
+      if (response.ok) console.log('Login successful:', data);
     }
     catch (error) {
       console.error('Error:', error);
@@ -122,7 +122,7 @@ export default function CardWithForm() {
                   </div>
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" placeholder="abc@mail.com" value={name} onChange={handleEmailChange}
+                    <Input id="email" placeholder="abc@mail.com" value={email} onChange={handleEmailChange}
                     />
                   </div>
                   <div className="flex flex-col space-y-1.5">
