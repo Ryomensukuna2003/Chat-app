@@ -49,7 +49,6 @@ export default function CardWithForm() {
         body: JSON.stringify({ name, password }),
       });
       const data = await response.json();
-      console.log('Response data:', data); // Log the response data
       if (response.ok) console.log('Login successful:', data);
     }
     catch (error) {
