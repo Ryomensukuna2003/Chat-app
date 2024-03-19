@@ -8,17 +8,11 @@ export default function CardWithForm() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value);
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
 
   const handleSubmitSignin = async (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -38,6 +32,7 @@ export default function CardWithForm() {
       console.error('Error:', error);
     }
   }
+
   const handleSubmitLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -57,7 +52,7 @@ export default function CardWithForm() {
   };
 
 
-  const [isSigned, setSigned] = useState(false);
+  const [isSigned, setSigned] = useState(true);
   const [isLogged, setLogged] = useState(false);
 
   const handleLogin = () => {
@@ -71,8 +66,11 @@ export default function CardWithForm() {
 
   return (
     <>
-      <Button type="submit" onClick={handleLogin}>Login</Button>
-      <Button type="submit" onClick={handleSignin}>SignUp</Button>
+      {/* For Buttons  */}
+      <div className="flex justify-center items-center mt-20 gap-x-10">
+        <Button type="submit" onClick={handleLogin}>Login</Button>
+        <Button type="submit" onClick={handleSignin}>SignUp</Button>
+      </div>
       {/* For Login */}
       {isLogged && (
         <div className="flex justify-center items-center mt-20">

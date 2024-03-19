@@ -1,4 +1,4 @@
-import { execute } from '../Models/db_model.js';
+import { execute } from '../src/Models/db_model.js';
 
 async function login(req, res) {
     const { name, password } = req.body;
@@ -8,18 +8,19 @@ async function login(req, res) {
     try {
         const queryResult = await execute(query, values);
         if (queryResult.rows.length > 0 && queryResult.rows[0].exists === true) {
-            res.status(200).json({ message: 'Login successful' }); 
+            res.status(200).json({ message: 'Login successful' });
         } else {
-            res.status(401).json({ message: 'Login Failed Bhosdike' }); 
+            res.status(401).json({ message: 'Login Failed Bhosdike' });
         }
     } catch (error) {
         console.error('Error in login:', error);
-        res.status(500).json({ message: 'Error in login' }); 
+        res.status(500).json({ message: 'Error in login' });
     }
 };
 
 
-async function signup(req,res){
+async function signup(req, res) {
+    console.log("inside signup");
     const { name, email, password } = req.body;
     const query = 'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)';
     const values = [name, email, password];
@@ -37,4 +38,9 @@ async function signup(req,res){
     }
 }
 
-export { login,signup };
+async function xyz(req, res) {
+    console.log("inside signup");
+    res.end("This is test");
+}
+
+export { login, signup, xyz };

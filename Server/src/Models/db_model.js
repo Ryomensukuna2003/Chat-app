@@ -1,13 +1,4 @@
-import pkg from 'pg';
-const { Pool } = pkg;
-
-const pool = new Pool({
-    user: 'shivanshu',
-    password: 'admin',
-    host: 'localhost',
-    port: '5432',
-    database: 'postgres',
-});
+import { pool } from '../Utils/pg.js';
 
 const execute = async function runQuery(queryText, values) {
     try {
@@ -17,6 +8,6 @@ const execute = async function runQuery(queryText, values) {
         console.error(err);
         throw err;
     }
-}
+};
 
-export { execute, pool };
+export { execute };
