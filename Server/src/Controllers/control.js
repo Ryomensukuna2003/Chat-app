@@ -10,4 +10,5 @@ const generateToken = (values) => {
     return token;
 };
 
+
 export default generateToken;

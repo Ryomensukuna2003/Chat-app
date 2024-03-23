@@ -16,7 +16,7 @@ async function login(req, res) {
             SET refresh_token=$1, refresh_token_time=$2 
             WHERE username = $3 AND password_hash = $4;`;
             const result = await execute(query2, values2);
-            res.status(200).json({ message: 'Login successful' });
+            res.status(200).json({ message: 'Login successful', token: token });
         } else {
             res.status(401).json({ message: 'Login Failed' });
         }
@@ -47,10 +47,4 @@ async function signup(req, res) {
         res.status(500).json({ message: 'Error in creating user' });
     }
 }
-
-async function xyz(req, res) {
-    console.log("inside signup");
-    res.end("This is test");
-}
-
-export { login, signup, xyz };
+export { login, signup };

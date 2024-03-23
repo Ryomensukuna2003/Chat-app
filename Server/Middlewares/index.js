@@ -4,4 +4,10 @@ function testMiddleware(filename) {
     }
 }
 
+function jwtCheck(){
+    return(req,res,next)=>{
+        
+    }
+}
+
 export { testMiddleware };
