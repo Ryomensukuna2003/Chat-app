@@ -15,7 +15,6 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-// app.use(cors);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -27,8 +26,6 @@ app.get("/test", (req, res) => {
     res.send("this is testing");
 })
 app.use('/api', router);
-
-// Socket.io logic remains the same
 
 server.listen(PORT, () => {
     console.log(`Server Listening at ${PORT}`);

@@ -2,14 +2,14 @@ import { execute } from '../src/Models/db_model.js';
 import generateToken from '../src/Controllers/control.js'
 import { config } from '../Config/index.js';
 import jwt from 'jsonwebtoken';
+import Queries from '../src/Controllers/Queries.js'
+const {Checking_users,Updating_Users,Inserting_users} = Queries;
 
 async function login(req, res) {
     const { name, password } = req.body;
     const values1 = [name, password];
-    const query1 = `SELECT EXISTS(SELECT 1 FROM users WHERE username = $1 AND password_hash = $2)`;
-
     try {
-        const queryResult = await execute(query1, values1);
+        const queryResult = await execute(Checking_users, values1);
         if (queryResult.rows.length > 0 && queryResult.rows[0].exists === true) {
             let token = generateToken({
                 'name': name,
@@ -17,10 +17,7 @@ async function login(req, res) {
             }); // for token
             let datetime = new Date().toLocaleString();
             const values2 = [token, datetime, name, password];
-            const query2 = `UPDATE users 
-            SET refresh_token=$1, refresh_token_time=$2 
-            WHERE username = $3 AND password_hash = $4;`;
-            const result = await execute(query2, values2);
+            const result = await execute(Updating_Users, values2);
             res.status(200).json({ message: 'Login successful', token: token });
         } else {
             res.status(401).json({ message: 'Login Failed' });
@@ -35,13 +32,10 @@ async function login(req, res) {
 async function signup(req, res) {
     const { name, email, password } = req.body;
     let datetime = new Date().toLocaleString();
-    const query = ` INSERT INTO users
-                    (username, email, password_hash,date_created,modifiy_date)
-                    VALUES ($1, $2, $3, $4, $4)`;
     const values = [name, email, password, datetime];
 
     try {
-        const result = await execute(query, values);
+        const result = await execute(Inserting_users, values);
         if (result.rowCount > 0) {
             res.status(200).json({ message: 'User Created' });
         } else {
@@ -60,9 +54,8 @@ async function verify_token(req, res) {
         if (err) console.log(err);
         else {
             let values = [decoded.username, decoded.password];
-            const query = `SELECT EXISTS(SELECT 1 FROM users WHERE username = $1 AND password_hash = $2)`;
             try {
-                const queryResult = await execute(query, values);
+                const queryResult = await execute(Checking_users, values);
                 if (queryResult.rows.length > 0 && queryResult.rows[0].exists === true) {
                     res.json({ isValid: true });
                     console.log("Token Verified");
