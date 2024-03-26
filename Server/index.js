@@ -22,9 +22,6 @@ app.use(testMiddleware("xyz"));
 
 const PORT = 5000;
 
-app.get("/test", (req, res) => {
-    res.send("this is testing");
-})
 app.use('/api', router);
 
 server.listen(PORT, () => {
