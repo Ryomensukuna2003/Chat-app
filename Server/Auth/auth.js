@@ -1,5 +1,7 @@
 import { execute } from '../src/Models/db_model.js';
 import generateToken from '../src/Controllers/control.js'
+import { config } from '../Config/index.js';
+import jwt from 'jsonwebtoken';
 
 async function login(req, res) {
     const { name, password } = req.body;
@@ -9,7 +11,10 @@ async function login(req, res) {
     try {
         const queryResult = await execute(query1, values1);
         if (queryResult.rows.length > 0 && queryResult.rows[0].exists === true) {
-            let token = generateToken(values1); // for token
+            let token = generateToken({
+                'name': name,
+                'password': password
+            }); // for token
             let datetime = new Date().toLocaleString();
             const values2 = [token, datetime, name, password];
             const query2 = `UPDATE users 
@@ -47,4 +52,30 @@ async function signup(req, res) {
         res.status(500).json({ message: 'Error in creating user' });
     }
 }
-export { login, signup };
+
+async function verify_token(req, res) {
+    let token = req.body.token; 
+    token = token.slice(1, -1); 
+    jwt.verify(token,process.env.SUPER_SECRET_KEY,  async (err, decoded) => {
+        if (err) console.log(err);
+        else {
+            let values = [decoded.username, decoded.password];
+            const query = `SELECT EXISTS(SELECT 1 FROM users WHERE username = $1 AND password_hash = $2)`;
+            try {
+                const queryResult = await execute(query, values);
+                if (queryResult.rows.length > 0 && queryResult.rows[0].exists === true) {
+                    res.json({ isValid: true });
+                    console.log("Token Verified");
+                } else {
+                    res.status(401).json({ isValid: false });
+                }
+            } catch (error) {
+                console.error('JWT auth failed:', error);
+                res.status(500).json({ message: 'Error in JWT Auth' });
+            }
+        }
+    })
+}
+
+export { login, signup, verify_token };
+

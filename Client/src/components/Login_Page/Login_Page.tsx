@@ -16,7 +16,6 @@ export default function CardWithForm() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [items, setItems] = useState([]);
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) =>
     setName(e.target.value);
@@ -39,7 +38,7 @@ export default function CardWithForm() {
       });
       const data = await response.json();
       if (response.ok) console.log(data);
-      else console.error("Login failed:", data.error);
+      else console.error("Signin failed:", data.error);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -58,11 +57,8 @@ export default function CardWithForm() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("Login successful:", data);
         localStorage.setItem("token", JSON.stringify(data.token)); // Save token directly
-        
-
-        navigate("/"); // Navigate to homepage after successful login
+        navigate("/");
       }
     } catch (error) {
       console.error("Error:", error);
