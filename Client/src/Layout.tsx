@@ -16,7 +16,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </div>
         </ThemeProvider>
       </div>
-      <style jsx>{`
+      <style jsx="true">{`
         body {
           overflow: hidden;
         }

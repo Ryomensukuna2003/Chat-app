@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 
+
 export default function CardWithForm() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -24,9 +25,9 @@ export default function CardWithForm() {
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
 
-  const navigate = useNavigate(); // Moved useNavigate outside of handleSubmitLogin
+  const navigate = useNavigate();
 
-  const handleSubmitSignin = async (e: FormEvent<HTMLInputElement>) => {
+  const handleSubmitSignin = async (e: any) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:5000/api/signin", {
@@ -37,7 +38,7 @@ export default function CardWithForm() {
         body: JSON.stringify({ name, email, password }),
       });
       const data = await response.json();
-      if (response.ok) console.log(data);
+      if (response.ok) console.log("Signed in Successfully");
       else console.error("Signin failed:", data.error);
     } catch (error) {
       console.error("Error:", error);
@@ -57,7 +58,7 @@ export default function CardWithForm() {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", JSON.stringify(data.token)); // Save token directly
+        localStorage.setItem("token", JSON.stringify(data.token)); 
         navigate("/");
       }
     } catch (error) {
@@ -183,3 +184,4 @@ export default function CardWithForm() {
     </>
   );
 }
+

@@ -7,9 +7,7 @@ const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({
 }): React.ReactNode => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const navigate = useNavigate();
-
   const token = localStorage.getItem("token");
-  console.log(localStorage.getItem("token"));
   useEffect(() => {
     const checkToken = async () => {
       if (token) {
@@ -26,7 +24,7 @@ const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({
     };
 
     checkToken();
-  }, []);
+  }, [token]); // Include dependencies: []
 
   if (isAuthenticated === null) {
     // Loading state
