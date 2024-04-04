@@ -8,7 +8,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <div className="min-h-screen bg-background font-sans antialiased ">
+      <div className=" bg-background font-sans antialiased ">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
@@ -16,11 +16,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </div>
         </ThemeProvider>
       </div>
-      <style jsx="true">{`
-        body {
-          overflow: hidden;
-        }
-      `}</style>
     </>
   );
 }

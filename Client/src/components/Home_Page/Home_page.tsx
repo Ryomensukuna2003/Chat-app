@@ -1,30 +1,41 @@
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
-
+import { ThemeProvider } from "@/components/theme-provider";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import { SiteHeader } from "@/components/site-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
-import Layout from "../../Layout";
 import { io } from "socket.io-client";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const socket = io("http://localhost:5000/");
+var currentdate = new Date();
+var datetime =
+  "Last Sync: " +
+  currentdate.getDate() +
+  "/" +
+  (currentdate.getMonth() + 1) +
+  "/" +
+  currentdate.getFullYear() +
+  " @ " +
+  currentdate.getHours() +
+  ":" +
+  currentdate.getMinutes() +
+  ":" +
+  currentdate.getSeconds();
 
-export default function Home_page() {git push -u origin master
+export default function HomePage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [message, setMessage] = useState("");
   const [room, setRoom] = useState("");
-  const [client_id, setClient_id] = useState("");
+  const [clientId, setClientId] = useState("");
 
   useEffect(() => {
-    socket.on("sending_to_client", (res:any) => {
+    socket.on("sending_to_client", (res: any) => {
       const { data, socket_id } = res;
-      console.log(socket_id," -> ",data );
-      setClient_id(socket_id);
+      console.log(socket_id, " -> ", data);
+      setClientId(socket_id);
       setMessages((prevMessages) => [...prevMessages, data]);
     });
 
@@ -33,78 +44,68 @@ export default function Home_page() {git push -u origin master
     };
   }, []);
 
-
-  const handle_message_change = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) =>
     setMessage(e.target.value);
 
-  const handle_room_change = (e: ChangeEvent<HTMLInputElement>) =>
+  const handleRoomChange = (e: ChangeEvent<HTMLInputElement>) =>
     setRoom(e.target.value);
 
-  const join_Room = (e: ChangeEvent<HTMLInputElement>) => {
+  const joinRoom = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    socket.emit("join", room);
+    toast("Joined Room " + room, {
+      description: datetime,
+    });
   };
 
-  const send_message = (e: FormEvent<HTMLFormElement>) => {
+  const sendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    socket.emit("chat", message);
+    socket.emit("chat", message,room);
     setMessage("");
   };
-  
 
   return (
-    <>
-      <Layout>
-        <ResizablePanelGroup
-          direction="horizontal"
-          className="min-h-screen min-w-screen-lg rounded-lg border"
-        >
-          <ResizablePanel defaultSize={25}>
-            <div className="flex h-full items-center justify-center p-6">
-              <span className="font-semibold">For Groups</span>
-            </div>
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={75}>
-            <Alert>
-              <Terminal className="h-4 w-4" />
-              <AlertTitle>{client_id}</AlertTitle>
-              <AlertDescription>
-                {messages.map((msg, index) => (
-                  <li key={index}>{msg}</li>
-                ))}
-              </AlertDescription>
-            </Alert>
-            <div className="flex h-full items-center justify-center p-6">
-              <span className="font-semibold">For Chats</span>
-            </div>
-            <form
-              className="flex gap-2 items-center p-2 fixed bottom-0 w-full"
-              onSubmit={send_message}
-            >
-              <Input
-                type="text"
-                id="room"
-                className="w-1/5"
-                placeholder="Room id"
-                value={room}
-                onChange={handle_room_change}
-              />
-              <Button type="submit">Join</Button>
-              <Input
-                type="text"
-                id="message"
-                className="w-2/5"
-                placeholder="Type your message here"
-                value={message}
-                onChange={handle_message_change}
-              />
-              <Button type="submit" id="messageButton">
-                Send
-              </Button>
-            </form>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </Layout>
-    </>
+    <div className="flex flex-col min-h-screen">
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <SiteHeader />
+      </ThemeProvider>
+      <div className="flex flex-row flex-grow">
+        <div className="basis-1/4 border-r border-#1E293B p-4">For Groups</div>
+        <div className="basis-3/4 relative">
+          <Alert>
+            <Terminal className="h-4 w-4" />
+            <AlertTitle>{clientId}</AlertTitle>
+            <AlertDescription>
+              {messages.map((msg, index) => (
+                <li key={index}>{msg}</li>
+              ))}
+            </AlertDescription>
+          </Alert>
+          <div className="flex gap-2 absolute bottom-0 left-0 right-0 p-2">
+            <Input
+              type="text"
+              className="basis-1/4"
+              placeholder="Room id"
+              value={room}
+              onChange={handleRoomChange}
+            />
+            <Button type="submit" onClick={joinRoom}>
+              Join
+            </Button>
+            <Input
+              type="text"
+              className="basis-3/4"
+              placeholder="Type your message here"
+              value={message}
+              onChange={handleMessageChange}
+            />
+            <Button type="submit" onClick={sendMessage}>
+              Send
+            </Button>
+            <Toaster />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
