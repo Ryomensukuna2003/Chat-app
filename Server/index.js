@@ -32,24 +32,33 @@ const PORT = 5000;
 
 io.on('connection', (socket) => {
     console.log('⚡️: User Connected', socket.id);
+    socket.join("");
     socket.on('chat', (res, room) => {
-        if (room === undefined) {
-            console.log("Recived from client -> ", res)
-            io.emit("sending_to_client", { data: res, socket_id: socket.id }); // For all
+        if (room === "") {
+            console.log("Recived from client (Global)-> ", res)
+            socket.to("").emit("sending_to_client", { data: res, socket_id: socket.id }); // For all
         }
         else {
-            console.log("Recived from client (room)-> ", res)
-            io.to(room).emit("sending_to_client", { data: res, socket_id: socket.id });
+            console.log(`Recived from client (`, room, ')-> ', res)
+            socket.to(room).emit("sending_to_client", { data: res, socket_id: socket.id });
         }
     })
-    socket.on("join", (room) => {
+
+    socket.on('join_room', (room) => {
         socket.join(room);
-        console.log("Joined room " + room);
+        io.emit('Updating_client_group', room);
+    });
+
+    socket.on("leave", (room) => {
+        socket.leave(room);
+        console.log("Removed from room");
     })
     socket.on('disconnect', () => {
         console.log('User Disconnected');
     })
 })
+
+// ----------------------------------------------------------------------------------------
 
 app.use('/api', router);
 
