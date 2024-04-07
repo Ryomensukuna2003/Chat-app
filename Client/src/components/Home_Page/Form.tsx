@@ -21,12 +21,15 @@ let datetime =
   ":" +
   currentdate.getSeconds();
 
+export interface MessageItem {
+  id: string;
+  message: string;
+}
+
 const Form = () => {
   const [message, setMessage] = useState<string>("");
   const [room, setRoom] = useState<string>("");
-  const [userMessages, setuserMessages] = useState<
-    { id: string; message: string }[]
-  >([]);
+  const [userMessages, setuserMessages] = useState<MessageItem[]>([]);
   const [clientId, setClientId] = useState("");
 
   const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -75,32 +78,32 @@ const Form = () => {
   };
 
   return (
-    <div className="basis-3/4 relative">
-      <form onSubmit={handleFormSubmit}>
-        <Messages_Field userMessages={userMessages} clientId={clientId} />
-        <div className="flex gap-2 absolute bottom-0 left-0 right-0 p-2">
-          <Input
-            type="text"
-            className="basis-1/4"
-            placeholder="Room id"
-            value={room}
-            onChange={handleRoomChange}
-          />
-          <Button type="button" onClick={joinRoom}>
-            Join
-          </Button>
-          <Input
-            type="text"
-            className="basis-3/4"
-            placeholder="Type your message here"
-            value={message}
-            onChange={handleMessageChange}
-          />
-          <Button type="submit">Send</Button>
-          <Toaster />
-        </div>
-      </form>
-    </div>
+      <div className="basis-3/4 relative">
+        <form onSubmit={handleFormSubmit}>
+          <Messages_Field userMessages={userMessages} clientId={clientId} />
+          <div className="flex gap-2 absolute bottom-0 left-0 right-0 p-2">
+            <Input
+              type="text"
+              className="basis-1/4"
+              placeholder="Room id"
+              value={room}
+              onChange={handleRoomChange}
+            />
+            <Button type="button" onClick={joinRoom}>
+              Join
+            </Button>
+            <Input
+              type="text"
+              className="basis-3/4"
+              placeholder="Type your message here"
+              value={message}
+              onChange={handleMessageChange}
+            />
+            <Button type="submit">Send</Button>
+            <Toaster />
+          </div>
+        </form>
+      </div>
   );
 };
 

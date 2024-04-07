@@ -22,7 +22,7 @@ let datetime =
 const Groups = () => {
   const [groups, setGroups] = useState<Set<string>>(new Set(["Global"]));
   const [currentRoom, setCurrentRoom] = useState<string | null>(null);
-
+  
   useEffect(() => {
     socket.on("Updating_client_group", (room: string) => {
       setGroups((prevGroups) => new Set([...prevGroups, room]));
@@ -74,7 +74,7 @@ const Groups = () => {
           {grp}
         </Button>
       ))}
-      <Toaster/>
+      <Toaster />
     </div>
   );
 };
